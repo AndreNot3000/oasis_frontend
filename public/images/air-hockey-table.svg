@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <!-- Deep Arcade Room Ambient Background -->
+    <radialGradient id="bgGlow" cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#172554" />
+      <stop offset="45%" stop-color="#090d24" />
+      <stop offset="100%" stop-color="#030511" />
+    </radialGradient>
+
+    <!-- Neon Cyan & Magenta Ambient Floor/Ceiling Reflections -->
+    <radialGradient id="cyanAura" cx="25%" cy="30%" r="45%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#00f0ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="pinkAura" cx="78%" cy="28%" r="45%">
+      <stop offset="0%" stop-color="#ff2a85" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ff2a85" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Glossy Air-Cushion Playfield Surface -->
+    <linearGradient id="rinkSurface" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="45%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#090f1f" />
+    </linearGradient>
+
+    <!-- Specular Ice Reflection Across Table -->
+    <linearGradient id="iceSheen" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.02" />
+      <stop offset="45%" stop-color="#38bdf8" stop-opacity="0.16" />
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.04" />
+    </linearGradient>
+
+    <!-- Metallic Brushed Aluminum Table Frame -->
+    <linearGradient id="metalRail" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="25%" stop-color="#475569" />
+      <stop offset="50%" stop-color="#94a3b8" />
+      <stop offset="75%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Red Striker / Mallet 3D Shading -->
+    <radialGradient id="redMalletBase" cx="38%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#ff6b9d" />
+      <stop offset="35%" stop-color="#ff1e56" />
+      <stop offset="80%" stop-color="#99002b" />
+      <stop offset="100%" stop-color="#4a0014" />
+    </radialGradient>
+    <radialGradient id="redMalletKnob" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="22%" stop-color="#ff4d79" />
+      <stop offset="75%" stop-color="#b30033" />
+      <stop offset="100%" stop-color="#3d0011" />
+    </radialGradient>
+
+    <!-- Cyan Striker / Mallet 3D Shading -->
+    <radialGradient id="cyanMalletBase" cx="38%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#a5f3fc" />
+      <stop offset="35%" stop-color="#00e5ff" />
+      <stop offset="80%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#082f49" />
+    </radialGradient>
+
+    <!-- Glowing Neon Yellow/Orange Puck -->
+    <radialGradient id="neonPuck" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="40%" stop-color="#facc15" />
+      <stop offset="80%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#7c2d12" />
+    </radialGradient>
+
+    <!-- Air-Hole Micro Grid Pattern -->
+    <pattern id="airHoles" width="22" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="1.1" fill="#64748b" fill-opacity="0.35" />
+      <circle cx="16" cy="14" r="1.1" fill="#64748b" fill-opacity="0.35" />
+    </pattern>
+
+    <!-- Glow Filter -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 1. Arcade Room Background -->
+  <rect width="1200" height="800" fill="url(#bgGlow)" />
+  <circle cx="300" cy="220" r="420" fill="url(#cyanAura)" />
+  <circle cx="920" cy="210" r="420" fill="url(#pinkAura)" />
+
+  <!-- Distant Arcade Bokeh Lights -->
+  <g opacity="0.55" filter="url(#strongGlow)">
+    <circle cx="140" cy="150" r="24" fill="#00f0ff" />
+    <circle cx="230" cy="110" r="16" fill="#ff2a85" />
+    <circle cx="1040" cy="140" r="28" fill="#a855f7" />
+    <circle cx="950" cy="95" r="18" fill="#ffb800" />
+    <circle cx="600" cy="80" r="22" fill="#00ffaa" />
+  </g>
+
+  <!-- 2. Perspective 3D Air Hockey Table Apron & Cabinet Base -->
+  <!-- Table Shadow on Floor -->
+  <polygon points="40,790 1160,790 950,310 250,310" fill="#02040a" opacity="0.85" />
+
+  <!-- Outer Metallic Table Side Apron (3D Extrusion) -->
+  <polygon points="70,755 1130,755 1165,695 35,695" fill="#0f172a" stroke="#334155" stroke-width="2" />
+  <!-- Outer Brushed Metal Rail Frame -->
+  <polygon points="35,695 1165,695 925,245 275,245" fill="url(#metalRail)" stroke="#64748b" stroke-width="3" />
+
+  <!-- 3. Illuminated Air-Cushion Playfield (Perspective Trapezoid) -->
+  <polygon points="95,665 1105,665 890,265 310,265" fill="url(#rinkSurface)" />
+  <polygon points="95,665 1105,665 890,265 310,265" fill="url(#airHoles)" />
+  <polygon points="95,665 1105,665 890,265 310,265" fill="url(#iceSheen)" />
+
+  <!-- 4. Glowing Neon LED Side Rails (Cyan Left, Magenta Right) -->
+  <line x1="95" y1="665" x2="310" y2="265" stroke="#00f0ff" stroke-width="8" stroke-linecap="round" filter="url(#neonGlow)" />
+  <line x1="1105" y1="665" x2="890" y2="265" stroke="#ff2a85" stroke-width="8" stroke-linecap="round" filter="url(#neonGlow)" />
+  <line x1="310" y1="265" x2="890" y2="265" stroke="#00ffaa" stroke-width="5" stroke-linecap="round" filter="url(#neonGlow)" />
+  <line x1="95" y1="665" x2="1105" y2="665" stroke="#38bdf8" stroke-width="6" stroke-linecap="round" filter="url(#neonGlow)" />
+
+  <!-- 5. Official Tournament Rink Markings on the Playfield -->
+  <!-- Far Goal Crease -->
+  <path d="M 495 265 A 105 52 0 0 0 705 265" fill="none" stroke="#ff2a85" stroke-width="4" filter="url(#neonGlow)" />
+  <line x1="515" y1="264" x2="685" y2="264" stroke="#ffffff" stroke-width="7" stroke-linecap="round" filter="url(#neonGlow)" />
+
+  <!-- Center Line & Center Face-Off Circle -->
+  <line x1="218" y1="436" x2="982" y2="436" stroke="#ff2a85" stroke-width="4" stroke-dasharray="18 10" filter="url(#neonGlow)" />
+  <ellipse cx="600" cy="436" rx="125" ry="52" fill="none" stroke="#00f0ff" stroke-width="5" filter="url(#neonGlow)" />
+  <ellipse cx="600" cy="436" rx="75" ry="31" fill="none" stroke="#ff2a85" stroke-width="2.5" opacity="0.85" />
+  <ellipse cx="600" cy="436" rx="14" ry="6" fill="#00f0ff" filter="url(#neonGlow)" />
+
+  <!-- Near Goal Crease & Glowing Goal Slot -->
+  <path d="M 415 665 A 185 82 0 0 1 785 665" fill="#00f0ff" fill-opacity="0.08" stroke="#00f0ff" stroke-width="5" filter="url(#neonGlow)" />
+  <line x1="445" y1="666" x2="755" y2="666" stroke="#ffffff" stroke-width="10" stroke-linecap="round" filter="url(#neonGlow)" />
+
+  <!-- 6. Overhead Electronic Scoreboard Arch -->
+  <g>
+    <!-- Left & Right Arch Struts -->
+    <path d="M 205 455 L 255 155 L 945 155 L 995 455" fill="none" stroke="#1e293b" stroke-width="22" stroke-linejoin="round" />
+    <path d="M 205 455 L 255 155 L 945 155 L 995 455" fill="none" stroke="#475569" stroke-width="14" stroke-linejoin="round" />
+    <path d="M 212 450 L 260 160 L 940 160 L 988 450" fill="none" stroke="#00f0ff" stroke-width="3" stroke-linejoin="round" filter="url(#neonGlow)" />
+
+    <!-- Digital Scoreboard Header Box -->
+    <rect x="370" y="95" width="460" height="96" rx="18" fill="#090d1e" stroke="#38bdf8" stroke-width="3.5" filter="url(#neonGlow)" />
+    <rect x="384" y="107" width="432" height="72" rx="12" fill="#040711" stroke="#1e293b" stroke-width="1.5" />
+
+    <!-- HOME / TIME / GUEST Digital LED Readout -->
+    <text x="455" y="132" fill="#00f0ff" font-family="monospace" font-size="14" font-weight="bold" text-anchor="middle" letter-spacing="2">PLAYER 1</text>
+    <text x="455" y="168" fill="#00f0ff" font-family="monospace" font-size="38" font-weight="900" text-anchor="middle" filter="url(#neonGlow)">07</text>
+
+    <text x="600" y="130" fill="#facc15" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle" letter-spacing="3">AIR HOCKEY</text>
+    <text x="600" y="166" fill="#ffffff" font-family="monospace" font-size="30" font-weight="900" text-anchor="middle">01:42</text>
+
+    <text x="745" y="132" fill="#ff2a85" font-family="monospace" font-size="14" font-weight="bold" text-anchor="middle" letter-spacing="2">PLAYER 2</text>
+    <text x="745" y="168" fill="#ff2a85" font-family="monospace" font-size="38" font-weight="900" text-anchor="middle" filter="url(#neonGlow)">06</text>
+  </g>
+
+  <!-- 7. Far Player Cyan Mallet / Striker (Upper Right Rink) -->
+  <g transform="translate(710, 335)">
+    <ellipse cx="0" cy="12" rx="48" ry="22" fill="#000000" opacity="0.55" />
+    <ellipse cx="0" cy="5" rx="46" ry="20" fill="#e0f2fe" />
+    <ellipse cx="0" cy="0" rx="46" ry="20" fill="url(#cyanMalletBase)" stroke="#7dd3fc" stroke-width="1.5" />
+    <ellipse cx="0" cy="-3" rx="32" ry="13" fill="#082f49" />
+    <path d="M -18 -4 L -15 -34 A 15 8 0 0 1 15 -34 L 18 -4 Z" fill="url(#cyanMalletBase)" />
+    <ellipse cx="0" cy="-34" rx="15" ry="7" fill="#a5f3fc" />
+  </g>
+
+  <!-- 8. High-Velocity Glowing Puck + Neon Motion Trail (Mid-Shot!) -->
+  <g>
+    <!-- Motion Blur Neon Streak from Near Mallet toward Far Goal -->
+    <polygon points="440,565 495,575 638,395 605,388" fill="url(#pinkAura)" opacity="0.7" filter="url(#neonGlow)" />
+    <line x1="468" y1="568" x2="618" y2="395" stroke="#facc15" stroke-width="8" stroke-linecap="round" opacity="0.65" filter="url(#neonGlow)" />
+    <line x1="485" y1="548" x2="622" y2="392" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+
+    <!-- The Puck -->
+    <g transform="translate(625, 388)">
+      <ellipse cx="0" cy="9" rx="38" ry="17" fill="#000000" opacity="0.65" />
+      <ellipse cx="0" cy="4" rx="36" ry="15" fill="#9a3412" />
+      <ellipse cx="0" cy="0" rx="36" ry="15" fill="url(#neonPuck)" stroke="#fef08a" stroke-width="2" filter="url(#neonGlow)" />
+      <ellipse cx="-8" cy="-3" rx="14" ry="5" fill="#ffffff" opacity="0.45" />
+    </g>
+  </g>
+
+  <!-- 9. Foreground Hero Red/Magenta Striker (Mallet) Close-Up -->
+  <g transform="translate(435, 565)">
+    <!-- Drop Shadow & Neon Reflection on Ice -->
+    <ellipse cx="0" cy="24" rx="88" ry="42" fill="#000000" opacity="0.7" />
+    <ellipse cx="0" cy="20" rx="96" ry="46" fill="#ff2a85" opacity="0.28" filter="url(#strongGlow)" />
+
+    <!-- White Low-Friction Nylon Glide Rim -->
+    <ellipse cx="0" cy="12" rx="82" ry="38" fill="#f8fafc" />
+    <!-- Mallet Beveled Skirt -->
+    <ellipse cx="0" cy="4" rx="82" ry="38" fill="url(#redMalletBase)" stroke="#fda4af" stroke-width="2" />
+    <!-- Recessed Inner Grip Well -->
+    <ellipse cx="0" cy="-2" rx="58" ry="26" fill="#3b0416" stroke="#ff4d79" stroke-width="1.5" />
+
+    <!-- Ergonomic Center Handle / Knob -->
+    <path d="M -30 -2 L -25 -62 A 25 13 0 0 1 25 -62 L 30 -2 Z" fill="url(#redMalletKnob)" />
+    <ellipse cx="0" cy="-62" rx="25" ry="12" fill="#ff85a2" stroke="#ffffff" stroke-width="1" />
+    <ellipse cx="-6" cy="-64" rx="10" ry="4" fill="#ffffff" opacity="0.65" />
+  </g>
+</svg>

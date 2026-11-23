@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 230 60% 7%;
+    --foreground: 210 40% 98%;
+    --card: 232 45% 12%;
+    --card-foreground: 210 40% 98%;
+    --popover: 232 45% 12%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 265 89% 58%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 184 100% 50%;
+    --secondary-foreground: 230 60% 7%;
+    --muted: 230 30% 20%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 359 100% 68%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 230 30% 20%;
+    --input: 230 30% 20%;
+    --ring: 265 89% 58%;
+    --radius: 0.75rem;
+  }
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0E27;
+}
+::-webkit-scrollbar-thumb {
+  background: #2D3768;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7C3AED;
+}
+
+/* Hero Typography 3D & Neon Shimmer Effects */
+@keyframes oasisGradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes oasisGlowBreath {
+  0%, 100% {
+    filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.35))
+            drop-shadow(0 0 38px rgba(255, 42, 133, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 26px rgba(255, 42, 133, 0.55))
+            drop-shadow(0 0 50px rgba(0, 240, 255, 0.4));
+  }
+}
+
+@keyframes oasisButtonSheen {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  35%, 100% {
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+
+.oasis-title-3d-white {
+  color: #ffffff;
+  text-shadow:
+    0 1px 0 #e2e8f0,
+    0 2px 0 #cbd5e1,
+    0 3px 0 #94a3b8,
+    0 4px 0 #475569,
+    0 8px 24px rgba(0, 0, 0, 0.9),
+    0 0 28px rgba(0, 240, 255, 0.28);
+}
+
+.oasis-title-neon-flow {
+  background: linear-gradient(
+    110deg,
+    #ffffff 0%,
+    #00f0ff 22%,
+    #ff2a85 48%,
+    #ffb800 72%,
+    #00f0ff 90%,
+    #ffffff 100%
+  );
+  background-size: 240% 240%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    oasisGradientFlow 6s ease-in-out infinite,
+    oasisGlowBreath 4s ease-in-out infinite;
+}
+
+.oasis-sheen-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.oasis-sheen-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: oasisButtonSheen 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Landing Page Post-Hero Ambient Aurora Mesh Gradients */
+@keyframes oasisAuroraDriftA {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8%, 6%, 0) scale(1.12);
+  }
+}
+
+@keyframes oasisAuroraDriftB {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-8%, -5%, 0) scale(1.15);
+  }
+}
+
+.oasis-aurora-a {
+  animation: oasisAuroraDriftA 18s ease-in-out infinite;
+}
+
+.oasis-aurora-b {
+  animation: oasisAuroraDriftB 22s ease-in-out infinite;
+}
+
+/* Neon Aurora Skeleton Loading Shimmer */
+@keyframes oasisSkeletonSweep {
+  0% {
+    transform: translateX(-120%) skewX(-16deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-16deg);
+  }
+}
+
+.oasis-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.oasis-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 65%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.09) 30%,
+    rgba(124, 58, 237, 0.16) 52%,
+    rgba(255, 42, 133, 0.1) 72%,
+    transparent 100%
+  );
+  animation: oasisSkeletonSweep 1.75s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Cinematic Auth Screen Animations (GPU-only transform + opacity) */
+@keyframes oasisAuthOrbFloatA {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(36px, 28px, 0) scale(1.08);
+    opacity: 0.78;
+  }
+}
+
+@keyframes oasisAuthOrbFloatB {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(-34px, -24px, 0) scale(1.1);
+    opacity: 0.72;
+  }
+}
+
+@keyframes oasisAuthBrandPulse {
+  0%, 100% {
+    transform: scale(0.96);
+    opacity: 0.48;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.8;
+  }
+}
+
+@keyframes oasisAuthIconFloat {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 0.95;
+  }
+}
+
+.oasis-auth-orb-purple {
+  animation: oasisAuthOrbFloatA 16s ease-in-out infinite;
+}
+
+.oasis-auth-orb-blue {
+  animation: oasisAuthOrbFloatB 20s ease-in-out infinite;
+}
+
+.oasis-auth-brand-glow {
+  animation: oasisAuthBrandPulse 7s ease-in-out infinite;
+}
+
+.oasis-auth-icon-1 {
+  animation: oasisAuthIconFloat 3.4s ease-in-out infinite;
+}
+.oasis-auth-icon-2 {
+  animation: oasisAuthIconFloat 4.1s ease-in-out 0.6s infinite;
+}
+.oasis-auth-icon-3 {
+  animation: oasisAuthIconFloat 3.7s ease-in-out 1.2s infinite;
+}
+
+.oasis-auth-primary-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.oasis-auth-primary-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: transform 0.65s ease;
+  pointer-events: none;
+}
+
+.oasis-auth-primary-btn:hover::after {
+  transform: translateX(360%) skewX(-20deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oasis-auth-orb-purple,
+  .oasis-auth-orb-blue,
+  .oasis-auth-brand-glow,
+  .oasis-auth-icon-1,
+  .oasis-auth-icon-2,
+  .oasis-auth-icon-3 {
+    animation: none;
+  }
+}
