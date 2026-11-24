@@ -114,7 +114,7 @@ export function SiteFooter() {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-oasis-yellow flex-shrink-0" />
-              <span>hello@oasisamusement.com</span>
+              <span>bookings@oasisamusementhub.com</span>
             </li>
             <li className="flex items-start gap-2">
               <Clock className="w-4 h-4 text-oasis-purple flex-shrink-0 mt-0.5" />

@@ -112,7 +112,7 @@ export default function PrivacyPolicyPage() {
             <p className="text-slate-400">
               Oasis Amusement Park — Plot 8, Lagere, Ile-Ife, Osun State •
               Phone: <strong>+2348035382620</strong> • Email:{' '}
-              <strong>hello@oasisamusement.com</strong>
+              <strong>bookings@oasisamusementhub.com</strong>
             </p>
           </section>
         </div>

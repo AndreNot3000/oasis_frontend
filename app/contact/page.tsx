@@ -70,7 +70,7 @@ export default function ContactPage() {
                 <div>
                   <div className="font-bold text-white">Email Enquiries</div>
                   <div className="text-slate-400 mt-0.5">
-                    hello@oasisamusement.com
+                    bookings@oasisamusementhub.com
                   </div>
                 </div>
               </div>

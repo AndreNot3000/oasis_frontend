@@ -94,7 +94,7 @@ export default function TermsOfServicePage() {
             <p className="text-slate-400">
               Questions regarding these terms? Reach us at{' '}
               <strong>+2348035382620</strong> or{' '}
-              <strong>hello@oasisamusement.com</strong>.
+              <strong>bookings@oasisamusementhub.com</strong>.
             </p>
           </section>
         </div>
