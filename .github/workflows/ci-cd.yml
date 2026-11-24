@@ -1,0 +1,78 @@
+name: Frontend CI & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Type-Check & Build Next.js
+    runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_APP_URL: https://oasisamusementhub.com
+      NEXT_PUBLIC_API_URL: /api/v1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --config.dangerously-allow-all-builds=true
+
+      - name: Type-Check
+        run: npx tsc --noEmit
+
+      - name: Production Build
+        run: pnpm build
+
+  deploy:
+    name: Deploy Frontend to VPS
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-oasis-frontend
+      cancel-in-progress: false
+
+    steps:
+      - name: Verify VPS_SSH_KEY secret is configured
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          if [ -z "$VPS_SSH_KEY" ]; then
+            echo "::error::Missing repository secret VPS_SSH_KEY. Add it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      - name: Load SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Pull, build & reload oasis-web on VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST || '162.35.60.215' }}
+          VPS_USER: ${{ secrets.VPS_USER || 'root' }}
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new "${VPS_USER}@${VPS_HOST}" '
+            set -euo pipefail
+            cd /opt/oasis/frontend
+            git pull --ff-only origin main
+            pnpm install --no-frozen-lockfile --config.dangerously-allow-all-builds=true
+            pnpm build
+            pm2 reload oasis-web --update-env || pm2 start node_modules/next/dist/bin/next --name oasis-web -- start -p 3000 -H 127.0.0.1
+            pm2 save
+          '
