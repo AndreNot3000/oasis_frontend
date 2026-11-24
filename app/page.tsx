@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -29,7 +29,12 @@ import { CarouselSkeleton } from '@/components/oasis-skeleton';
 import { SocialLinks } from '@/components/social-links';
 import { BookingSteps } from '@/components/booking-steps';
 import { GuestReviews } from '@/components/guest-reviews';
-import { motion } from 'framer-motion';
+import {
+  ScrollProgressBeam,
+  SectionTransitionBeam,
+  ScrollReveal,
+} from '@/components/scroll-effects';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { apiClient } from '@/lib/api-client';
 import { formatCurrency } from '@/lib/utils';
 
@@ -72,6 +77,15 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [spinBoost, setSpinBoost] = useState(false);
 
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroBackdropY = useTransform(heroScroll, [0, 1], ['0%', '18%']);
+  const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '-14%']);
+  const heroTextOpacity = useTransform(heroScroll, [0, 0.78], [1, 0]);
+
   useEffect(() => {
     async function loadHomeData() {
       try {
@@ -96,40 +110,50 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-oasis-navy">
+      <ScrollProgressBeam />
       <SiteHeader />
 
       <main className="flex-1">
         {/* 1-4. Full-Viewport Reference-Styled Hero with Interactive 3D Aerial Ride & Spheres */}
-        <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-end md:flex-row md:items-end bg-[#040611]">
-          {/* Indoor Neon Amusement Park Backdrop Photo */}
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-45 scale-105"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=2000&q=85')",
-            }}
-          />
+        <section
+          ref={heroRef}
+          className="relative overflow-hidden min-h-[90vh] flex flex-col justify-end md:flex-row md:items-end bg-[#040611]"
+        >
+          {/* Parallax wrapper for backdrop photo + 3D WebGL scene */}
+          <motion.div style={{ y: heroBackdropY }} className="absolute inset-0">
+            {/* Indoor Neon Amusement Park Backdrop Photo */}
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-45 scale-105"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=2000&q=85')",
+              }}
+            />
 
-          {/* Neon Color Washes (Deep Starry Night Top Sky + Clean Left Negative Space + Ambient Right Glow) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#03050e] via-[#040611]/90 via-45% to-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E27] via-transparent to-[#02040a]/85" />
-          <div className="absolute top-16 right-1/4 w-[420px] h-[220px] bg-emerald-400/12 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute top-1/3 right-1/4 w-[480px] h-[480px] bg-fuchsia-600/15 rounded-full blur-[140px] pointer-events-none" />
+            {/* Neon Color Washes (Deep Starry Night Top Sky + Clean Left Negative Space + Ambient Right Glow) */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#03050e] via-[#040611]/90 via-45% to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0E27] via-transparent to-[#02040a]/85" />
+            <div className="absolute top-16 right-1/4 w-[420px] h-[220px] bg-emerald-400/12 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/3 right-1/4 w-[480px] h-[480px] bg-fuchsia-600/15 rounded-full blur-[140px] pointer-events-none" />
 
-          {/* Full-Bleed Three.js 3D WebGL Scene (3D Aerial Swing Ride + Photorealistic 3D Balloons + Starry Night Sky) */}
-          <div
-            onClick={() => setSpinBoost((prev) => !prev)}
-            title="Click to toggle 3D ride speed"
-            className="absolute inset-0 z-10 cursor-pointer"
-          >
-            <Hero3dCanvas spinBoost={spinBoost} />
-          </div>
+            {/* Full-Bleed Three.js 3D WebGL Scene (3D Aerial Swing Ride + Photorealistic 3D Balloons + Starry Night Sky) */}
+            <div
+              onClick={() => setSpinBoost((prev) => !prev)}
+              title="Click to toggle 3D ride speed"
+              className="absolute inset-0 z-10 cursor-pointer"
+            >
+              <Hero3dCanvas spinBoost={spinBoost} />
+            </div>
+          </motion.div>
 
           {/* Mobile Bottom Stage Gradient (keeps the top 3D ride crystal clear while giving bottom text a clean dark stage) */}
           <div className="md:hidden absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-[#060919] via-[#060919]/95 via-65% to-transparent z-[15] pointer-events-none" />
 
           {/* Hero Typography & Dual Pill Buttons (Grounded Lower-Left on Desktop, Bottom-Docked on Mobile) */}
-          <div className="max-w-7xl w-full mx-auto px-5 sm:px-10 pt-64 pb-8 md:pt-52 md:pb-12 lg:pt-56 lg:pb-14 relative z-20 pointer-events-none">
+          <motion.div
+            style={{ y: heroTextY, opacity: heroTextOpacity }}
+            className="max-w-7xl w-full mx-auto px-5 sm:px-10 pt-64 pb-8 md:pt-52 md:pb-12 lg:pt-56 lg:pb-14 relative z-20 pointer-events-none"
+          >
             <motion.div
               initial="hidden"
               animate="visible"
@@ -305,7 +329,7 @@ export default function HomePage() {
             <div className="mt-6 md:mt-10 pointer-events-auto">
               <SocialLinks />
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* Rich Multi-Layer Neon Aurora Gradient Backdrop for All Post-Hero Sections */}
@@ -328,48 +352,55 @@ export default function HomePage() {
           </div>
 
           <div className="relative z-10">
+        <SectionTransitionBeam accent="cyan" />
         {/* 5 & 6. Explore Attractions & Featured Experiences */}
         <section id="attractions" className="py-20 bg-white/[0.015] border-y border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-oasis-coral">
-                  Signature Experiences
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-                  Explore Attractions &amp; Experiences
-                </h2>
+            <ScrollReveal>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-oasis-coral">
+                    Signature Experiences
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
+                    Explore Attractions &amp; Experiences
+                  </h2>
+                </div>
+                <Link
+                  href="/attractions"
+                  className="mt-4 sm:mt-0 text-sm font-bold text-oasis-cyan hover:underline inline-flex items-center gap-1"
+                >
+                  Filter &amp; search all attractions <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <Link
-                href="/attractions"
-                className="mt-4 sm:mt-0 text-sm font-bold text-oasis-cyan hover:underline inline-flex items-center gap-1"
-              >
-                Filter &amp; search all attractions <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            </ScrollReveal>
 
-            {loading ? (
-              <CarouselSkeleton />
-            ) : (
-              <CrumpleCardCarousel
-                items={attractions}
-                background="transparent"
-                imageY={0}
-                hold={3600}
-                crumple={100}
-                itemWidth={507}
-                itemHeight={400}
-                gap={-90}
-                radius={14}
-                dragSens={100}
-                direction="horizontal"
-                bounce={0}
-                hover={50}
-                speed={6}
-              />
-            )}
+            <ScrollReveal direction="scale" delay={0.08}>
+              {loading ? (
+                <CarouselSkeleton />
+              ) : (
+                <CrumpleCardCarousel
+                  items={attractions}
+                  background="transparent"
+                  imageY={0}
+                  hold={3600}
+                  crumple={100}
+                  itemWidth={507}
+                  itemHeight={400}
+                  gap={-90}
+                  radius={14}
+                  dragSens={100}
+                  direction="horizontal"
+                  bounce={0}
+                  hover={50}
+                  speed={6}
+                />
+              )}
+            </ScrollReveal>
           </div>
         </section>
+
+        <SectionTransitionBeam accent="amber" />
 
         {/* 7. Packages and Offers */}
         <section id="packages" className="relative py-14 sm:py-20 overflow-hidden">
@@ -484,40 +515,49 @@ export default function HomePage() {
         </section>
 
         {/* 8. How It Works */}
+        <SectionTransitionBeam accent="cyan" />
         <BookingSteps />
 
         {/* 9. Upcoming Events */}
+        <SectionTransitionBeam accent="purple" />
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-oasis-coral">
-                  Group Celebrations &amp; Tournaments
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-                  Upcoming Park Events &amp; Group Packages
-                </h2>
+            <ScrollReveal>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-oasis-coral">
+                    Group Celebrations &amp; Tournaments
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
+                    Upcoming Park Events &amp; Group Packages
+                  </h2>
+                </div>
+                <Link
+                  href="/events"
+                  className="mt-4 sm:mt-0 text-sm font-bold text-oasis-cyan hover:underline inline-flex items-center gap-1"
+                >
+                  Reserve an event space <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <Link
-                href="/events"
-                className="mt-4 sm:mt-0 text-sm font-bold text-oasis-cyan hover:underline inline-flex items-center gap-1"
-              >
-                Reserve an event space <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {events.map((ev) => (
-                <div
+              {events.map((ev, idx) => (
+                <motion.div
                   key={ev.id}
-                  className="rounded-2xl overflow-hidden bg-oasis-card border border-slate-800 flex flex-col"
+                  initial={{ opacity: 0, y: 28, scale: 0.97 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.55, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ y: -6 }}
+                  className="group rounded-2xl overflow-hidden bg-oasis-card border border-slate-800 hover:border-oasis-purple/60 hover:shadow-[0_20px_44px_-16px_rgba(124,58,237,0.4)] transition-colors flex flex-col"
                 >
                   {ev.coverImageUrl && (
                     <div className="h-44 overflow-hidden relative">
                       <img
                         src={ev.coverImageUrl}
                         alt={ev.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-oasis-purple text-white">
                         {ev.eventType.replace('_', ' ')}
@@ -551,20 +591,24 @@ export default function HomePage() {
                       </Link>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
         {/* 10 & 11. Guest Reviews & Park Highlights */}
-        <GuestReviews />
+        <SectionTransitionBeam accent="cyan" />
+        <ScrollReveal>
+          <GuestReviews />
+        </ScrollReveal>
 
         {/* 12 & 13. Location, Operating Hours & FAQ */}
+        <SectionTransitionBeam accent="amber" />
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Operating Hours & Location */}
-            <div className="lg:col-span-5 space-y-6">
+            <ScrollReveal direction="left" className="lg:col-span-5 space-y-6">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-oasis-cyan">
                   Plan Your Visit
@@ -606,10 +650,10 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* FAQ Accordion */}
-            <div className="lg:col-span-7 space-y-6">
+            <ScrollReveal direction="right" delay={0.1} className="lg:col-span-7 space-y-6">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-oasis-coral">
                   Got Questions?
@@ -623,8 +667,12 @@ export default function HomePage() {
                 {faqs.map((item, idx) => {
                   const isOpen = openFaq === idx;
                   return (
-                    <div
+                    <motion.div
                       key={idx}
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
                       className="rounded-2xl bg-oasis-card border border-slate-800 overflow-hidden"
                     >
                       <button
@@ -637,21 +685,31 @@ export default function HomePage() {
                           {item.q}
                         </span>
                         <ChevronDown
-                          className={`w-4 h-4 text-slate-400 transition-transform ${
+                          className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
                             isOpen ? 'rotate-180 text-oasis-cyan' : ''
                           }`}
                         />
                       </button>
-                      {isOpen && (
-                        <div className="px-5 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
-                          {item.a}
-                        </div>
-                      )}
-                    </div>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-5 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+                              {item.a}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                   );
                 })}
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
           </div>
