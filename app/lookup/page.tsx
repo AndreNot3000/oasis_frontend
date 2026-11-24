@@ -80,20 +80,25 @@ function LookupInner() {
     setError(null);
     try {
       setPaying(true);
-      const initRes = await apiClient<any>('/payments/initialize', {
+      const res = await apiClient<any>('/payments/bachs/initialize', {
         method: 'POST',
-        body: JSON.stringify({ bookingReference: booking.reference }),
+        body: JSON.stringify({
+          bookingReference: booking.reference,
+          returnOrigin: typeof window !== 'undefined' ? window.location.origin : undefined,
+        }),
       });
-      await apiClient<any>(
-        `/payments/dev-simulate-charge/${encodeURIComponent(
-          initRes.providerReference,
-        )}`,
-        { method: 'POST' },
-      );
-      await performLookup(booking.reference, email);
+      if (!res?.checkoutUrl) {
+        throw new Error('Could not start payment checkout');
+      }
+      try {
+        sessionStorage.setItem('oasis_pay_email', email.trim());
+        sessionStorage.setItem('oasis_pay_booking', booking.reference);
+      } catch {
+        // storage unavailable
+      }
+      window.location.href = res.checkoutUrl;
     } catch (err: any) {
-      setError(err.message || 'Could not complete payment');
-    } finally {
+      setError(err.message || 'Could not start payment checkout');
       setPaying(false);
     }
   };

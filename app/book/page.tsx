@@ -66,8 +66,7 @@ function BookingWizardInner() {
 
   const [serverQuote, setServerQuote] = useState<any | null>(null);
   const [activeHold, setActiveHold] = useState<any | null>(null);
-  const [paymentInit, setPaymentInit] = useState<any | null>(null);
-  const [payMethod, setPayMethod] = useState<'paystack' | 'stablecoin'>('paystack');
+  const [payMethod, setPayMethod] = useState<'bachs' | 'stablecoin'>('bachs');
   const [issuedTickets, setIssuedTickets] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -294,7 +293,7 @@ function BookingWizardInner() {
     }
   };
 
-  // Step 4 -> Step 5: Lock 15-minute capacity hold & initialize Paystack payment
+  // Step 4 -> Step 5: Lock 15-minute capacity hold & proceed to payment choice
   const handleCreateHoldAndInitPayment = async () => {
     setError(null);
     try {
@@ -323,12 +322,6 @@ function BookingWizardInner() {
         body: JSON.stringify(holdPayload),
       });
       setActiveHold(holdRes);
-
-      const payRes = await apiClient<any>('/payments/initialize', {
-        method: 'POST',
-        body: JSON.stringify({ bookingReference: holdRes.reference }),
-      });
-      setPaymentInit(payRes);
       setStep(5);
     } catch (err: any) {
       setError(err.message || 'Could not create capacity hold');
@@ -337,13 +330,14 @@ function BookingWizardInner() {
     }
   };
 
-  // Step 5 (alt): Pay with USDT / USDC via GemRails hosted checkout (redirects away)
-  const handleStablecoinPayment = async () => {
+  // Step 5: Launch hosted checkout for either Bachs (Card / Bank Transfer) or GemRails (USDT / USDC)
+  const handleHostedCheckout = async (provider: 'bachs' | 'gemrails') => {
     if (!activeHold?.reference) return;
     setError(null);
+    const label = provider === 'bachs' ? 'card / bank transfer' : 'stablecoin';
     try {
       setSubmitting(true);
-      const res = await apiClient<any>('/payments/gemrails/initialize', {
+      const res = await apiClient<any>(`/payments/${provider}/initialize`, {
         method: 'POST',
         body: JSON.stringify({
           bookingReference: activeHold.reference,
@@ -351,44 +345,21 @@ function BookingWizardInner() {
         }),
       });
       if (!res?.checkoutUrl) {
-        throw new Error('Could not start stablecoin checkout');
+        throw new Error(`Could not start ${label} checkout`);
       }
-      // The return page needs the guest email to load tickets after the redirect back.
+      // Persist guest email & booking ref so the return page can display lookup links immediately.
       try {
-        sessionStorage.setItem('oasis_gr_email', email.trim());
+        sessionStorage.setItem('oasis_pay_email', email.trim());
+        sessionStorage.setItem('oasis_pay_booking', activeHold.reference);
+        if (provider === 'gemrails') {
+          sessionStorage.setItem('oasis_gr_email', email.trim());
+        }
       } catch {
-        // storage can be unavailable (private mode); the return page falls back to the lookup form
+        // storage can be unavailable in private browsing
       }
       window.location.href = res.checkoutUrl;
     } catch (err: any) {
-      setError(err.message || 'Could not start stablecoin checkout');
-      setSubmitting(false);
-    }
-  };
-
-  // Step 5 -> Step 6: Complete Paystack payment & retrieve QR tickets
-  const handleCompletePaystackPayment = async () => {
-    if (!paymentInit?.providerReference || !activeHold?.reference) return;
-    setError(null);
-    try {
-      setSubmitting(true);
-      await apiClient<any>(
-        `/payments/dev-simulate-charge/${encodeURIComponent(
-          paymentInit.providerReference,
-        )}`,
-        { method: 'POST' },
-      );
-
-      const ticketsData = await apiClient<any>(
-        `/tickets/${encodeURIComponent(
-          activeHold.reference,
-        )}?email=${encodeURIComponent(email.trim())}`,
-      );
-      setIssuedTickets(ticketsData?.tickets || []);
-      setStep(6);
-    } catch (err: any) {
-      setError(err.message || 'Payment verification failed');
-    } finally {
+      setError(err.message || `Could not start ${label} checkout`);
       setSubmitting(false);
     }
   };
@@ -1043,7 +1014,7 @@ function BookingWizardInner() {
             </div>
           )}
 
-          {step === 5 && activeHold && paymentInit && (
+          {step === 5 && activeHold && (
             <div className="p-7 rounded-2xl bg-oasis-card border border-oasis-cyan/40 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
                 <div>
@@ -1053,7 +1024,7 @@ function BookingWizardInner() {
                   <h2 className="text-2xl font-black text-white mt-1">
                     {payMethod === 'stablecoin'
                       ? 'Pay with USDT / USDC'
-                      : 'Complete Paystack Checkout'}
+                      : 'Complete Card / Bank Transfer Checkout'}
                   </h2>
                 </div>
                 <div className="px-3.5 py-2 rounded-xl bg-oasis-navy border border-slate-700 text-xs font-mono text-oasis-yellow">
@@ -1066,14 +1037,6 @@ function BookingWizardInner() {
                   <span className="text-slate-400">Booking Reference:</span>
                   <span className="font-bold text-white">{activeHold.reference}</span>
                 </div>
-                {payMethod === 'paystack' && (
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Paystack Reference:</span>
-                    <span className="font-mono text-oasis-cyan">
-                      {paymentInit.providerReference}
-                    </span>
-                  </div>
-                )}
                 <div className="flex justify-between">
                   <span className="text-slate-400">Hold Expires At:</span>
                   <span className="text-oasis-yellow">
@@ -1096,19 +1059,19 @@ function BookingWizardInner() {
                 <button
                   type="button"
                   role="radio"
-                  aria-checked={payMethod === 'paystack'}
-                  onClick={() => setPayMethod('paystack')}
+                  aria-checked={payMethod === 'bachs'}
+                  onClick={() => setPayMethod('bachs')}
                   className={`text-left p-4 rounded-xl border transition-all ${
-                    payMethod === 'paystack'
+                    payMethod === 'bachs'
                       ? 'border-oasis-cyan bg-oasis-cyan/10 shadow-[0_0_20px_rgba(0,240,255,0.12)]'
                       : 'border-slate-700 bg-oasis-navy hover:border-slate-500'
                   }`}
                 >
                   <div className="flex items-center gap-2 font-bold text-sm text-white">
-                    <CreditCard className="w-4 h-4 text-oasis-cyan" /> Card / Bank (Paystack)
+                    <CreditCard className="w-4 h-4 text-oasis-cyan" /> Card / Bank Transfer (Bachs)
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    Pay in Naira with a debit card, bank transfer or USSD.
+                    Pay securely with NGN bank transfer, Nigerian cards, or international cards.
                   </p>
                 </button>
                 <button
@@ -1135,7 +1098,7 @@ function BookingWizardInner() {
                 <button
                   type="button"
                   disabled={submitting}
-                  onClick={handleStablecoinPayment}
+                  onClick={() => handleHostedCheckout('gemrails')}
                   className="w-full inline-flex items-center justify-center gap-2.5 py-4 rounded-2xl font-black text-base bg-gradient-to-r from-emerald-400 to-teal-300 text-oasis-navy shadow-xl hover:opacity-95 transition-all disabled:opacity-60"
                 >
                   <Coins className="w-5 h-5" />
@@ -1150,16 +1113,16 @@ function BookingWizardInner() {
                 <button
                   type="button"
                   disabled={submitting}
-                  onClick={handleCompletePaystackPayment}
-                  className="w-full inline-flex items-center justify-center gap-2.5 py-4 rounded-2xl font-black text-base bg-gradient-to-r from-emerald-400 to-oasis-cyan text-oasis-navy shadow-xl hover:opacity-95 transition-all"
+                  onClick={() => handleHostedCheckout('bachs')}
+                  className="w-full inline-flex items-center justify-center gap-2.5 py-4 rounded-2xl font-black text-base bg-gradient-to-r from-emerald-400 to-oasis-cyan text-oasis-navy shadow-xl hover:opacity-95 transition-all disabled:opacity-60"
                 >
                   <CreditCard className="w-5 h-5" />
                   {submitting
-                    ? 'Verifying Payment & Issuing QR Tickets...'
+                    ? 'Opening secure Bachs checkout...'
                     : `Pay ${formatCurrency(
                         activeHold.totalAmountMinor,
                         activeHold.currency,
-                      )} via Paystack`}
+                      )} via Card / Bank Transfer`}
                 </button>
               )}
             </div>
