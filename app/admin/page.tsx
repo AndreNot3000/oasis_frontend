@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import {
   LayoutDashboard,
   Ticket,
@@ -15,9 +14,8 @@ import {
   Lock,
   Eye,
   EyeOff,
+  ShieldCheck,
 } from 'lucide-react';
-import { SiteHeader } from '@/components/site-header';
-import { SiteFooter } from '@/components/site-footer';
 import { WalkInPosTab } from '@/components/admin/walk-in-pos-tab';
 import { ScannerCheckInTab } from '@/components/admin/scanner-checkin-tab';
 import { BookingsPaymentsTab } from '@/components/admin/bookings-payments-tab';
@@ -110,7 +108,38 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-oasis-navy">
-      <SiteHeader />
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#040611]/90 border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] px-4 sm:px-6 lg:px-8 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-oasis-purple to-oasis-coral flex items-center justify-center shadow-lg flex-shrink-0">
+              <ShieldCheck className="w-4 h-4 text-white" />
+            </div>
+            <div className="min-w-0">
+              <div className="font-black text-white text-sm tracking-wide truncate">
+                OASIS OPERATIONS CONSOLE
+              </div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-oasis-cyan">
+                Restricted Admin &amp; Staff Portal
+              </div>
+            </div>
+          </div>
+
+          {staffUser && (
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <span className="hidden sm:inline-block px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[11px] font-semibold text-slate-300">
+                {staffUser.email} • <strong className="text-oasis-cyan">{staffUser.role}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 hover:bg-red-500/20 text-slate-200 hover:text-red-200 border border-white/10 transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" /> Sign Out
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {loading ? (
@@ -473,8 +502,6 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </main>
-
-      <SiteFooter />
     </div>
   );
 }
