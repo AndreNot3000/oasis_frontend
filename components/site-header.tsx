@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Ticket,
-  LayoutDashboard,
   Menu,
   X,
   User,
@@ -101,13 +100,6 @@ export function SiteHeader() {
             >
               <User className="w-3.5 h-3.5 text-cyan-400" />
             </Link>
-            <Link
-              href="/admin"
-              title="Staff & Admin Operations Console"
-              className="p-2 rounded-full bg-white/5 hover:bg-white/15 text-slate-200 hover:text-white border border-white/10 transition-colors"
-            >
-              <LayoutDashboard className="w-3.5 h-3.5 text-fuchsia-400" />
-            </Link>
           </div>
         </div>
 
@@ -142,13 +134,6 @@ export function SiteHeader() {
               className="flex-1 text-center py-2.5 rounded-full text-xs font-bold bg-white/10 text-white border border-white/15"
             >
               My Account
-            </Link>
-            <Link
-              href="/admin"
-              onClick={() => setMobileOpen(false)}
-              className="flex-1 text-center py-2.5 rounded-full text-xs font-bold bg-white/10 text-white border border-white/15"
-            >
-              Staff Console
             </Link>
             <Link
               href="/book"

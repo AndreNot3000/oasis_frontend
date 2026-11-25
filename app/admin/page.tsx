@@ -40,7 +40,7 @@ export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [dashboard, setDashboard] = useState<any | null>(null);
 
-  const [email, setEmail] = useState('admin@oasisamusement.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -147,6 +147,7 @@ export default function AdminDashboardPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter admin email"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-oasis-navy border border-slate-700 text-sm text-white"
                 />
               </div>

@@ -82,11 +82,6 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link href="/admin" className="hover:text-oasis-cyan transition-colors">
-                Staff &amp; Turnstile Operations
-              </Link>
-            </li>
-            <li>
               <Link href="/privacy" className="hover:text-oasis-cyan transition-colors">
                 Privacy Policy
               </Link>
