@@ -8,7 +8,6 @@ import {
   Menu,
   X,
   User,
-  Sparkles,
 } from 'lucide-react';
 
 const navLinks = [
@@ -33,11 +32,12 @@ export function SiteHeader() {
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Left: Emblem + "Oasis Amusement Park" Logo (Always Single Line) */}
         <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-          <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-tr from-[#7C3AED] via-[#FF2A85] to-[#00F0FF] p-0.5 shadow-lg shadow-fuchsia-500/25 group-hover:scale-105 transition-transform flex-shrink-0">
-            <div className="h-full w-full rounded-[10px] bg-black/85 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300" />
-            </div>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt="Oasis Amusement Park Logo"
+            className="h-9 w-9 sm:h-10 sm:w-10 rounded-full object-contain drop-shadow-[0_0_12px_rgba(16,185,129,0.35)] group-hover:scale-105 transition-transform flex-shrink-0"
+          />
           <div className="leading-none whitespace-nowrap">
             <div className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-300">
               Oasis

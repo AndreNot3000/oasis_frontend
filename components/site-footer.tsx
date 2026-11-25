@@ -9,9 +9,12 @@ export function SiteFooter() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-10 border-b border-slate-800/80">
         <div>
           <div className="flex items-center gap-2.5 mb-4">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-oasis-purple via-oasis-coral to-oasis-cyan flex items-center justify-center font-black text-sm text-white">
-              O
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Oasis Amusement Park Logo"
+              className="h-9 w-9 rounded-full object-contain flex-shrink-0"
+            />
             <span className="font-black text-lg text-white">
               OASIS AMUSEMENT PARK
             </span>

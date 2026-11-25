@@ -14,7 +14,6 @@ import {
   Lock,
   Eye,
   EyeOff,
-  ShieldCheck,
 } from 'lucide-react';
 import { WalkInPosTab } from '@/components/admin/walk-in-pos-tab';
 import { ScannerCheckInTab } from '@/components/admin/scanner-checkin-tab';
@@ -111,9 +110,12 @@ export default function AdminDashboardPage() {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#040611]/90 border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] px-4 sm:px-6 lg:px-8 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-oasis-purple to-oasis-coral flex items-center justify-center shadow-lg flex-shrink-0">
-              <ShieldCheck className="w-4 h-4 text-white" />
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Oasis Amusement Park Logo"
+              className="h-9 w-9 rounded-full object-contain flex-shrink-0"
+            />
             <div className="min-w-0">
               <div className="font-black text-white text-sm tracking-wide truncate">
                 OASIS OPERATIONS CONSOLE

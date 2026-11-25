@@ -247,6 +247,12 @@ export function OasisAuthScreen({
                 aria-hidden="true"
                 className="oasis-auth-brand-glow absolute -inset-x-6 -inset-y-2 rounded-full bg-gradient-to-r from-purple-600/45 via-pink-500/35 to-blue-500/45 blur-xl pointer-events-none"
               />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="Oasis Amusement Park Logo"
+                className="relative h-12 w-12 mx-auto mb-2.5 rounded-full object-contain drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]"
+              />
               <Link
                 href="/"
                 className="relative inline-block text-2xl sm:text-3xl font-black tracking-tight text-white"
